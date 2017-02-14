@@ -1,0 +1,23 @@
+version: '2'
+services:
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        environment:
+            - MYSQL_DATABASE=lightswift
+            - MYSQL_ROOT_PASSWORD=mySecretPassword
+        restart: always
+    swift:
+        image: deanrock/light-swift:latest
+        depends_on:
+            - mysql
+        restart: always
+        ports:
+            - "localhost:8080:8080"
+        volumes:
+            - ./data/swift:/tmp/lightswiftstorage
+        environment:
+            - MYSQL_ROOT_PASSWORD=mySecretPassword
+            - SWIFT_PASSWORD=myPassword
+            - SWIFT_TOKEN=myToken
